@@ -1,6 +1,14 @@
-let money = 999000000000; // Initial money value
+let money = 10000; // Initial money value
 let passiveIncome = 0; // Initial passive income
 let cityLevel = 1;
+let friendsInvited = 0; // Initial invited friends value
+let twitterRewardClaimed = false;
+let youtubeRewardClaimed = false;
+let telegramRewardClaimed = false;
+let invite1RewardClaimed = false;
+let invite5RewardClaimed = false;
+let invite10RewardClaimed = false;
+
 
 const buildings = {
     school: {
@@ -274,29 +282,146 @@ function updateAvailableClicksMax() {
     switch (cityLevel) {
         case 1:
             availableClicksMax = 2000;
+            availableClicks = 2000;
+            money+=1000;
             break;
         case 2:
             availableClicksMax = 5000;
+            availableClicks = 5000;
+            money+=2000;
             break;
         case 3:
             availableClicksMax = 6000;
+            availableClicks = 6000;
+            money+=10000;
             break;
         case 4:
             availableClicksMax = 7000;
+            availableClicks = 7000;
+            money+=20000;
             break;
         case 5:
             availableClicksMax = 7000;
+            availableClicks = 7000;
+            money+=50000;
             break;
         case 6:
             availableClicksMax = 7000;
+            availableClicks = 7000;
+            money+=500000;
             break;
         case 7:
             availableClicksMax = 10000;
+            availableClicks = 10000;
+            money+=1000000;
             break;
         default:
             availableClicksMax = 2000; // Default value
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Function to handle reward claiming
+    function handleClaimReward(button, rewardType, url, rewardAmount, condition = true) {
+        if (!condition) return;
+
+        switch (rewardType) {
+            case 'twitter':
+                if (!twitterRewardClaimed) {
+                    window.open(url, '_blank');
+                    money += rewardAmount;
+                    twitterRewardClaimed = true;
+                    button.querySelector('img').src = 'images/CLAIMED_REWARD.webp';
+                    button.classList.add('disabled');
+                }
+                break;
+            case 'youtube':
+                if (!youtubeRewardClaimed) {
+                    window.open(url, '_blank');
+                    money += rewardAmount;
+                    youtubeRewardClaimed = true;
+                    button.querySelector('img').src = 'images/CLAIMED_REWARD.webp';
+                    button.classList.add('disabled');
+                }
+                break;
+            case 'telegram':
+                if (!telegramRewardClaimed) {
+                    window.open(url, '_blank');
+                    money += rewardAmount;
+                    telegramRewardClaimed = true;
+                    button.querySelector('img').src = 'images/CLAIMED_REWARD.webp';
+                    button.classList.add('disabled');
+                }
+                break;
+            case 'invite1':
+                if (!invite1RewardClaimed && friendsInvited >= 1) {
+                    money += rewardAmount;
+                    invite1RewardClaimed = true;
+                    button.querySelector('img').src = 'images/CLAIMED_REWARD.webp';
+                    button.classList.add('disabled');
+                }
+                break;
+            case 'invite5':
+                if (!invite5RewardClaimed && friendsInvited >= 5) {
+                    money += rewardAmount;
+                    invite5RewardClaimed = true;
+                    button.querySelector('img').src = 'images/CLAIMED_REWARD.webp';
+                    button.classList.add('disabled');
+                }
+                break;
+            case 'invite10':
+                if (!invite10RewardClaimed && friendsInvited >= 10) {
+                    money += rewardAmount;
+                    invite10RewardClaimed = true;
+                    button.querySelector('img').src = 'images/CLAIMED_REWARD.webp';
+                    button.classList.add('disabled');
+                }
+                break;
+            default:
+                break;
+        }
+
+        // Update money display
+        document.getElementById('money-display').innerHTML = money.toLocaleString() + ' <span class="coin-emoji"></span>';
+    }
+
+    // Add event listeners to the buttons
+    document.querySelectorAll('.task').forEach(task => {
+        const button = task.querySelector('.claim-reward-btn');
+        const img = task.querySelector('img[alt]');
+
+        switch (img.alt) {
+            case 'Subscribe to Twitter':
+                button.addEventListener('click', () => handleClaimReward(button, 'twitter', 'https://www.instagram.com/timapotapenko?igsh=MWxsNHBibzN5andudQ%3D%3D&utm_source=qr', 10000));
+                break;
+            case 'Subscribe to YouTube':
+                button.addEventListener('click', () => handleClaimReward(button, 'youtube', 'https://youtube.com/@eeoneguy?si=HGGBM6MghxytXRLe', 10000));
+                break;
+            case 'Subscribe to Telegram':
+                button.addEventListener('click', () => handleClaimReward(button, 'telegram', 'https://t.me/+iLQq9R7VJLM3YTAy', 10000));
+                break;
+            case 'Invite 1 Friend':
+                button.addEventListener('click', () => handleClaimReward(button, 'invite1', '', 10000, friendsInvited >= 1));
+                break;
+            case 'Invite 5 Friends':
+                button.addEventListener('click', () => handleClaimReward(button, 'invite5', '', 100000, friendsInvited >= 5));
+                break;
+            case 'Invite 10 Friends':
+                button.addEventListener('click', () => handleClaimReward(button, 'invite10', '', 500000, friendsInvited >= 10));
+                break;
+            default:
+                break;
+        }
+    });
+
+    // Prevent default action for disabled buttons
+    document.addEventListener('click', (event) => {
+        if (event.target.closest('.claim-reward-btn.disabled')) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+});
 
 function showCityLevelImage() {
     const imageId = `city-level-${cityLevel}`;
@@ -322,7 +447,7 @@ function hideAllCityLevelImages() {
 }
 
 
-let availableClicks = 0; // Initial available clicks
+let availableClicks = 2000; // Initial available clicks
 
 function increaseAvailableClicks() {
         if (availableClicks < availableClicksMax) {
