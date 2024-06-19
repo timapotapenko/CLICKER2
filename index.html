@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Phone Screen</title>
+    <script src="path/to/vibration.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.Telegram.WebApp) {
+                window.Telegram.WebApp.expand();
+            } else {
+                console.log("Telegram Web App is not available.");
+            }
+        });
+    </script>
+    <div class="container">
+        <div class="container">
+            <div id="topbar" class="topbar">
+                <div class="adaptive-text1" id="money-display">1.000<span class="coin-emoji"></span></div>
+                <div class="adaptive-text2" id="passive-display">0<span class="coin-emoji"></span></div>
+            </div>
+        <div id="screen-city" class="screen hidden">
+            <img src="images/smallvillage.webp" alt="Background" class="background" id="background">
+            <img src="images/guy.webp" alt="Guy" class="guy" id="guy">
+            <button id="energy-limit-btn">
+                <img src="images/energy_limit.webp" alt="Energy Limit">
+                <span class="button-text">10000 clics</span>
+            </button>
+            <img src="images/2.webp" alt="City Level 2" class="city-level-image hidden" id="city-level-2">
+            <img src="images/3.webp" alt="City Level 3" class="city-level-image hidden" id="city-level-3">
+            <img src="images/4.webp" alt="City Level 4" class="city-level-image hidden" id="city-level-4">
+            <img src="images/5.webp" alt="City Level 5" class="city-level-image hidden" id="city-level-5">
+            <img src="images/6.webp" alt="City Level 6" class="city-level-image hidden" id="city-level-6">
+            <img src="images/7.webp" alt="City Level 7" class="city-level-image hidden" id="city-level-7">
+        </div>
+        <div id="screen-upgrade" class="screen hidden">
+            <img src="images/BACKGROUND_MENU.webp" alt="Background" class="background">
+            <div class="upgrade-content">
+                <!-- Пример элементов зданий -->
+                <div class="building-upgrade">
+                    <img src="images/lvl1_building1.webp" alt="Small School">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Small School</span>
+                        <span class="level-upgrade" id="school-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="school-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="school-upgrade-btn" onclick="upgradeBuilding('school')">UPGRADE 50 COINS</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl1_building2.webp" alt="Small Farm">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Small Farm</span>
+                        <span class="level-upgrade" id="farm-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="farm-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="farm-upgrade-btn" onclick="upgradeBuilding('farm')">UPGRADE 75 COINS</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl2_building3.webp" alt="Small Store">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Small Store</span>
+                        <span class="level-upgrade" id="store-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="store-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="store-upgrade-btn" onclick="upgradeBuilding('store')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl2_building4.webp" alt="Small Park">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Small Park</span>
+                        <span class="level-upgrade" id="park-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="park-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="park-upgrade-btn" onclick="upgradeBuilding('park')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl3_building5.webp" alt="Hospital">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Hospital</span>
+                        <span class="level-upgrade" id="hospital-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="hospital-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="hospital-upgrade-btn" onclick="upgradeBuilding('hospital')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl3_building6.webp" alt="Police Station">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Police Station</span>
+                        <span class="level-upgrade" id="police-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="police-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="police-upgrade-btn" onclick="upgradeBuilding('police')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl3_building7.webp" alt="Fire Station">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Fire Station</span>
+                        <span class="level-upgrade" id="fire-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="fire-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="fire-upgrade-btn" onclick="upgradeBuilding('fire')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl3_building8.webp" alt="Factory">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Factory</span>
+                        <span class="level-upgrade" id="factory-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="factory-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="factory-upgrade-btn" onclick="upgradeBuilding('factory')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl3_building9.webp" alt="Medium Store">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Medium Store</span>
+                        <span class="level-upgrade" id="mediumStore-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="mediumStore-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="mediumStore-upgrade-btn" onclick="upgradeBuilding('mediumStore')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl4_building10.webp" alt="Big Factory">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Big Factory</span>
+                        <span class="level-upgrade" id="bigFactory-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="bigFactory-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="bigFactory-upgrade-btn" onclick="upgradeBuilding('bigFactory')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl4_building11.webp" alt="Airport">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Airport</span>
+                        <span class="level-upgrade" id="airport-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="airport-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="airport-upgrade-btn" onclick="upgradeBuilding('airport')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl4_building12.webp" alt="University">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">University</span>
+                        <span class="level-upgrade" id="university-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="university-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="university-upgrade-btn" onclick="upgradeBuilding('university')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl4_building13.webp" alt="Mall">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Mall</span>
+                        <span class="level-upgrade" id="mall-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="mall-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="mall-upgrade-btn" onclick="upgradeBuilding('mall')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl4_building14.webp" alt="Stadium">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Stadium</span>
+                        <span class="level-upgrade" id="stadium-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="stadium-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="stadium-upgrade-btn" onclick="upgradeBuilding('stadium')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl5_building15.webp" alt="Big Hospital">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Big Hospital</span>
+                        <span class="level-upgrade" id="bigHospital-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="bigHospital-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="bigHospital-upgrade-btn" onclick="upgradeBuilding('bigHospital')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl5_building16.webp" alt="Big Police Station">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Big Police Station</span>
+                        <span class="level-upgrade" id="bigPoliceStation-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="bigPoliceStation-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="bigPoliceStation-upgrade-btn" onclick="upgradeBuilding('bigPoliceStation')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl5_building17.webp" alt="Big Fire Station">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Big Fire Station</span>
+                        <span class="level-upgrade" id="bigFireStation-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="bigFireStation-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="bigFireStation-upgrade-btn" onclick="upgradeBuilding('bigFireStation')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl5_building18.webp" alt="Military Base">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Military Base</span>
+                        <span class="level-upgrade" id="militaryBase-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="militaryBase-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="militaryBase-upgrade-btn" onclick="upgradeBuilding('militaryBase')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl5_building19.webp" alt="Huge Mall">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Huge Mall</span>
+                        <span class="level-upgrade" id="hugeMall-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="hugeMall-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="hugeMall-upgrade-btn" onclick="upgradeBuilding('hugeMall')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl6_building20.webp" alt="Big Train Station">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Big Train Station</span>
+                        <span class="level-upgrade" id="bigTrainStation-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="bigTrainStation-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="bigTrainStation-upgrade-btn" onclick="upgradeBuilding('bigTrainStation')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl6_building21.webp" alt="Shipping Port">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Shipping Port</span>
+                        <span class="level-upgrade" id="shippingPort-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="shippingPort-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="shippingPort-upgrade-btn" onclick="upgradeBuilding('shippingPort')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl6_building22.webp" alt="Advanced Factory">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Advanced Factory</span>
+                        <span class="level-upgrade" id="advancedFactory-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="advancedFactory-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="advancedFactory-upgrade-btn" onclick="upgradeBuilding('advancedFactory')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl6_building23.webp" alt="Super Stadium">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Super Stadium</span>
+                        <span class="level-upgrade" id="superStadium-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="superStadium-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="superStadium-upgrade-btn" onclick="upgradeBuilding('superStadium')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl6_building24.webp" alt="Area 51">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Area 51</span>
+                        <span class="level-upgrade" id="area51-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="area51-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="area51-upgrade-btn" onclick="upgradeBuilding('area51')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl7_building25.webp" alt="Skyscraper">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Skyscraper</span>
+                        <span class="level-upgrade" id="skyscraper-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="skyscraper-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="skyscraper-upgrade-btn" onclick="upgradeBuilding('skyscraper')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl7_building26.webp" alt="Launch Site">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Launch Site</span>
+                        <span class="level-upgrade" id="launchSite-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="launchSite-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="launchSite-upgrade-btn" onclick="upgradeBuilding('launchSite')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl7_building27.webp" alt="Nuclear Plant">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Nuclear Plant</span>
+                        <span class="level-upgrade" id="nuclearPlant-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="nuclearPlant-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="nuclearPlant-upgrade-btn" onclick="upgradeBuilding('nuclearPlant')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl7_building28.webp" alt="Crypto Museum">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Crypto Museum</span>
+                        <span class="level-upgrade" id="cryptoMuseum-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="cryptoMuseum-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="cryptoMuseum-upgrade-btn" onclick="upgradeBuilding('cryptoMuseum')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+                <div class="building-upgrade">
+                    <img src="images/lvl7_building29.webp" alt="Megapolis Mall">
+                    <div class="info-upgrade">
+                        <span class="title-upgrade">Megapolis Mall</span>
+                        <span class="level-upgrade" id="megapolisMall-level">LVL: 0</span>
+                        <span class="passive-upgrade" id="megapolisMall-passive">Passive: 0</span>
+                        <button class="upgrade-btn-upgrade" id="megapolisMall-upgrade-btn" onclick="upgradeBuilding('megapolisMall')" disabled>Need Higher Level</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="screen-tasks" class="screen hidden">
+                <img src="images/BACKGROUND_MENU.webp" alt="Background" class="background">
+                <div class="task-content">
+                    <div class="task">
+                        <img src="images/twitter_button.webp" alt="Subscribe to Twitter">
+                        <button class="claim-reward-btn">
+                            <img src="images/CLAIM_REWARD.webp" alt="Claim Reward">
+                        </button>
+                    </div>
+                    <div class="task">
+                        <img src="images/youtube_button.webp" alt="Subscribe to YouTube">
+                        <button class="claim-reward-btn">
+                            <img src="images/CLAIM_REWARD.webp" alt="Claim Reward">
+                        </button>
+                    </div>
+                    <div class="task">
+                        <img src="images/telegram_button.webp" alt="Subscribe to Telegram">
+                        <button class="claim-reward-btn">
+                            <img src="images/CLAIM_REWARD.webp" alt="Claim Reward">
+                        </button>
+                    </div>
+                    <div class="task">
+                        <img src="images/invite1_button.webp" alt="Invite 1 Friend">
+                        <button class="claim-reward-btn">
+                            <img src="images/CLAIM_REWARD.webp" alt="Claim Reward">
+                        </button>
+                    </div>
+                    <div class="task">
+                        <img src="images/invite5_button.webp" alt="Invite 5 Friends">
+                        <button class="claim-reward-btn">
+                            <img src="images/CLAIM_REWARD.webp" alt="Claim Reward">
+                        </button>
+                    </div>
+                    <div class="task">
+                        <img src="images/invite10_button.webp" alt="Invite 10 Friends">
+                        <button class="claim-reward-btn">
+                            <img src="images/CLAIM_REWARD.webp" alt="Claim Reward">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="screen-friends" class="screen">
+                <img src="images/BACKGROUND_MENU.webp" alt="Background" class="background">
+                <div class="friends-content">
+                    <h2 class="invite-title">Invite friends and get bonuses!</h2>
+                    <div class="invite-btn-container">
+                        <button class="invite-btn" id="invite-friends-btn">
+                            <img src="images/button_invitef.webp" alt="Invite friends">
+                        </button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="friends-list-btn"><img src="images/FRIENDS_LIST.webp" alt="Friends List"></button>
+                        <button class="claim-rewards-btn"><img src="images/CLAIM_REWARD.webp" alt="Claim Rewards"></button>
+                    </div>
+                    <div class="friends-list-section">
+                        <h2>Bonus List</h2>
+                        <ul class="friends-list"></ul>
+                        <div class="bottom-image">
+                            <img src="images/rewardsfriends.webp" alt="Rewards">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="screen-games" class="screen hidden">
+                <img src="images/BACKGROUND_GAMES.webp" alt="Background" class="background">
+            </div>
+            <div class="lowbar">
+                <img src="images/LOWBAR.webp" alt="Low Bar">
+            </div>
+            <div class="nav-icons">
+                <div class="icon" onclick="showScreen('city')">
+                    <img src="images/CITY_BUTTON.webp" alt="City Button">
+                    <span>City</span>
+                </div>
+                <div class="icon" onclick="showScreen('upgrade')">
+                    <img src="images/UPGRADE_BUTTON.webp" alt="Upgrade Button">
+                    <span>Upgrade</span>
+                </div>
+                <div class="icon" onclick="showScreen('tasks')">
+                    <img src="images/TASKS_BUTTON.webp" alt="Tasks Button">
+                    <span>Tasks</span>
+                </div>
+                <div class="icon" onclick="showScreen('friends')">
+                    <img src="images/FRIENDS_BUTTON.webp" alt="Friends Button">
+                    <span>Friends</span>
+                </div>
+                <div class="icon" onclick="showScreen('games')">
+                    <img src="images/GAMES_BUTTON.webp" alt="Games Button">
+                    <span>Games</span>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+    </html>
+    

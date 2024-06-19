@@ -1,0 +1,616 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Non-prefixed version */
+}
+
+button, button img {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Non-prefixed version */
+    -webkit-touch-callout: none; /* Prevent long press to show callout on iOS */
+}
+
+img {
+    -webkit-user-drag: none; /* Disable image dragging */
+    -webkit-user-select: none; /* Disable image text selection in Safari */
+    -moz-user-select: none; /* Disable image text selection in Firefox */
+    -ms-user-select: none; /* Disable image text selection in Internet Explorer/Edge */
+    user-select: none; /* Disable image text selection in all browsers */
+}
+/* Ensure the background image covers the entire container */
+.background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.guy {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: auto;
+    z-index: 10;
+    transition: transform 0.2s ease; /* Smooth movement */
+}
+
+@keyframes jump {
+    0% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, -15px); /* Move up by 10px */
+    }
+    100% {
+        transform: translate(-50%, 0);
+    }
+}
+
+.guy.jump {
+    animation: jump 0.4s; /* Duration for jump */
+}
+
+@keyframes fly {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+    90% {
+        opacity: 0.3;
+        transform: translate(var(--fly-x), var(--fly-y));
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--fly-x), var(--fly-y));
+    }
+}
+
+.topbar {
+    background-size: cover;
+    background-position: center;
+    height: 100px; /* Пример высоты */
+    width: 100%; /* Пример ширины */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.coin {
+    position: absolute;
+    bottom: 70px; /* Adjust position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35px; /* Adjust size as needed */
+    height: 35px;
+    background-image: url('images/coin.webp'); /* Adjust path as needed */
+    background-size: cover;
+    animation: fly 1.5s forwards; /* Increase duration for slower disappearance */
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    touch-action: none; /* Отключаем жесты масштабирования */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    overflow: hidden;
+}
+
+.adaptive-text2 {
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    position: absolute; 
+    top: 60px; 
+    right: 10px; 
+    font-size: 20px;
+    z-index: 20;
+}
+
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.topbar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.topbar img {
+    width: 100%;
+    height: auto;
+}
+
+.lowbar {
+    position: absolute;
+    bottom: -5px;
+    width: 100%;
+    z-index: 10;
+}
+
+.lowbar img {
+    width: 100%;
+    height: auto;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.hidden {
+    display: none;
+}
+
+.upgrade-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    padding: 20px;
+    padding-bottom: 250px;
+    box-sizing: border-box;
+    z-index: 5;
+    margin-top: 80px;
+}
+
+.building-upgrade {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    z-index: 10;
+    height: 120px;
+    padding: 10px;
+    background-color: #002d5a;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.building-upgrade img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.building-upgrade .info-upgrade {
+    margin-left: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    overflow: hidden;
+}
+
+.building-upgrade .title-upgrade {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff9800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.building-upgrade .level-upgrade,
+.building-upgrade .passive-upgrade {
+    font-size: 14px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.building-upgrade .upgrade-btn-upgrade {
+    display: flex;
+    align-items: center;
+    background-color: #ff9800;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: auto;
+    border-radius: 5px;
+}
+
+.building-upgrade .upgrade-btn-upgrade img {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+
+.task-content {
+    width: 100%;
+    height: calc(100% - 150px); /* Учитываем высоту верхней и нижней панелей */
+    overflow-y: scroll;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 5;
+    margin-top: 100px; /* Отступ сверху для верхней панели */
+    padding-bottom: 75px; /* Отступ снизу для нижней панели */
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    z-index: 10;
+    height: 120px;
+    position: relative;
+}
+
+.task img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.task .info {
+    margin-left: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.task .info .title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff9800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task .info .reward {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+}
+
+.reward-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.task .info .reward img {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+}
+
+.task .claim-reward-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: -17px; /* Подняли кнопку вверх */
+    right: -50px; /* Сместили кнопку влево */
+    transform: translate(-50%, -50%);
+}
+
+.task .claim-reward-btn img {
+    width: 135px; /* Увеличили кнопку */
+    height: auto;
+}
+
+.friends-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll; /* Добавляем прокрутку */
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 5;
+    margin-top: 80px;
+    padding-bottom: 80px; /* Увеличиваем отступ снизу */
+}
+
+.upgrade-btn-upgrade:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+.invite-title {
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.invite-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px; /* Уменьшаем отступ снизу */
+}
+
+.invite-btn img {
+    width: 100%;
+    max-width: 430px; /* Устанавливаем максимальную ширину для кнопки */
+    height: auto;
+    cursor: pointer;
+    border: none;
+}
+
+.action-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px; /* Уменьшаем отступ снизу */
+}
+
+.friends-list-btn img, .claim-rewards-btn img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+}
+
+.friends-list-section {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 0px; /* Уменьшаем отступ сверху */
+    padding-bottom: 150px; /* Увеличиваем отступ снизу */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.friends-list-section h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.friends-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.friends-list li {
+    background-color: #002d5a;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friends-list li img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.bottom-image {
+    margin-top: 10px; /* Добавляем отступ сверху, чтобы изображение не касалось списка */
+}
+
+.bottom-image img {
+    width: 100%;
+    max-width: 430px;
+    height: auto;
+}
+
+.icon img {
+    border: none;
+}
+
+button {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.nav-icons {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    z-index: 20;
+}
+
+.icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.nav-icons img {
+    width: 50px;
+    height: 50px;
+}
+
+.icon span {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.coin-emoji {
+    width: 15px; /* Задайте желаемый размер */
+    height: 15px;
+    background: url('images/coin.webp') no-repeat center center;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.adaptive-text1, .adaptive-text2 {
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    position: absolute; /* Позволяет перемещать элементы */
+}
+
+/* Default styles for small screens (mobile first approach) */
+@media (max-width: 600px) {
+    .adaptive-text1 {
+        font-size: 20px;
+        padding: 2px;
+        top: 60px; /* Положение по вертикали */
+        left: 60px; /* Положение по горизонтали */
+    }
+
+    .adaptive-text2 {
+        font-size: 20px;
+        padding: 2px;
+        top: 60px; /* Положение по вертикали */
+        right: 45px; /* Положение по горизонтали */
+    }
+}
+
+/* Styles for medium screens */
+@media (min-width: 355px) and (max-width: 400px) {
+    .adaptive-text1 {
+        font-size: 16px;
+        padding: 4px;
+        top: 50px; /* Положение по вертикали */
+        left: 50px; /* Положение по горизонтали */
+    }
+
+    .adaptive-text2 {
+        font-size: 16px;
+        padding: 4px;
+        top: 50px; /* Положение по вертикали */
+        right: 45px; /* Положение по горизонтали */
+    }
+}
+
+/* Styles for large screens */
+@media (min-width: 401px) and (max-width: 600px) {
+    .adaptive-text1 {
+        font-size: 20px;
+        padding: 2px;
+        top: 60px; /* Положение по вертикали */
+        left: 60px; /* Положение по горизонтали */
+    }
+
+    .adaptive-text2 {
+        font-size: 20px;
+        padding: 2px;
+        top: 60px; /* Положение по вертикали */
+        right: 45px; /* Положение по горизонтали */
+    }
+}
+
+#energy-limit-btn {
+    position: absolute;
+    bottom: calc(105px); /* 50px выше lowbar */
+    left: 10px; /* Настройте по необходимости */
+    background: transparent;
+    border: none;
+    padding: 0;
+    z-index: 15; /* Обеспечивает, что кнопка будет выше lowbar */
+}
+
+#energy-limit-btn img {
+    width: 120px; /* Установите нужную ширину */
+    height: auto; /* Сохранение пропорций */
+}
+
+#energy-limit-btn .button-text {
+    position: absolute;
+    left: 20%;
+    transform: translateY(-70%);
+    top: 50%;
+    color: white; /* Adjust text color as needed */
+    font-size: 13px; /* Adjust font size as needed */
+    font-weight: bold;
+    pointer-events: none; /* Ensure the text does not interfere with button clicks */
+}
+
+.city-level-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20; /* Ensure it is above other elements */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Example sizes - you can customize these */
+#city-level-2, #city-level-3, #city-level-4, #city-level-5, #city-level-6, #city-level-7 {
+    width: 340px; /* Width of the image container */
+    height: 700px; /* Height will adjust automatically */
+    max-width: 600px; /* Optional: maximum width */
+    max-height: 700px; /* Optional: maximum height */
+}
