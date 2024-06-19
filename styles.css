@@ -601,6 +601,8 @@ button {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 20; /* Ensure it is above other elements */
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
 }
 
 .hidden {
@@ -609,8 +611,6 @@ button {
 
 /* Example sizes - you can customize these */
 #city-level-2, #city-level-3, #city-level-4, #city-level-5, #city-level-6, #city-level-7 {
-    width: 340px; /* Width of the image container */
-    height: 700px; /* Height will adjust automatically */
-    max-width: 600px; /* Optional: maximum width */
-    max-height: 700px; /* Optional: maximum height */
+    max-width: 100%; /* Maximum width set to 100% of the screen width */
+    max-height: auto; /* Maximum height adjusted automatically */
 }
