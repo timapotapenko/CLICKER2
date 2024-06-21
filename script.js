@@ -715,4 +715,46 @@ document.addEventListener('DOMContentLoaded', function () {
     updateUI();
 });
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const userId = new URLSearchParams(window.location.search).get('user_id');
+    if (!userId) {
+        console.error('User ID is not provided in the URL');
+        return;
+    }
+
+    const serverUrl = 'http://51.20.10.135:5000'; // Замените на ваш публичный IP-адрес
+
+    try {
+        const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+            let money = data.money;
+            let passiveIncome = data.passive_income;
+            let cityLevel = data.city_level;
+            let friendsInvited = data.friends_invited;
+            let availableClicks = data.available_clicks;
+            let moneyPerClick = data.money_per_click;
+            let twitterRewardClaimed = data.twitter_reward_claimed;
+            let youtubeRewardClaimed = data.youtube_reward_claimed;
+            let telegramRewardClaimed = data.telegram_reward_claimed;
+            let invite1RewardClaimed = data.invite1_reward_claimed;
+            let invite5RewardClaimed = data.invite5_reward_claimed;
+            let invite10RewardClaimed = data.invite10_reward_claimed;
+
+            // Предполагается, что здания тоже получены из базы данных
+            // const buildings = data.buildings;
+
+            // Инициализация UI
+            updateMoneyDisplay();
+            updatePassiveDisplay();
+            updateUI();
+        } else {
+            console.error('Failed to load user data:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+});
+
 showScreen('city');
