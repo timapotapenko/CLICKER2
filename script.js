@@ -275,9 +275,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             invite5RewardClaimed = data.invite5_reward_claimed;
             invite10RewardClaimed = data.invite10_reward_claimed;
 
+            // Обновление данных зданий
+            Object.keys(data.buildings).forEach(buildingName => {
+                buildings[buildingName].level = data.buildings[buildingName].level;
+                buildings[buildingName].passive = data.buildings[buildingName].passive;
+            });
+
             // Обновление UI
-            updateMoneyDisplay();
-            updatePassiveDisplay();
+            updateUI();
         } else {
             console.error('Failed to load user data:', data.error);
         }
@@ -285,6 +290,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error fetching user data:', error);
     }
 });
+
+function saveUserData() {
+    const userId = new URLSearchParams(window.location.search).get('user_id');
+    if (!userId) {
+        console.error('User ID is not provided in the URL');
+        return;
+    }
+
+    const serverUrl = '/api';
+    const userData = {
+        money,
+        passive_income: passiveIncome,
+        city_level: cityLevel,
+        friends_invited: friendsInvited,
+        available_clicks: availableClicks,
+        money_per_click: moneyPerClick,
+        twitter_reward_claimed: twitterRewardClaimed,
+        youtube_reward_claimed: youtubeRewardClaimed,
+        telegram_reward_claimed: telegramRewardClaimed,
+        invite1_reward_claimed: invite1RewardClaimed,
+        invite5_reward_claimed: invite5RewardClaimed,
+        invite10_reward_claimed: invite10RewardClaimed,
+        buildings: {}
+    };
+
+    Object.keys(buildings).forEach(buildingName => {
+        userData.buildings[buildingName] = {
+            level: buildings[buildingName].level,
+            passive: buildings[buildingName].passive
+        };
+    });
+
+    fetch(`${serverUrl}/update_user_data/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('User data saved successfully');
+        } else {
+            console.error('Failed to save user data:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error saving user data:', error);
+    });
+}
 
 let moneyPerClick = 1; // Initial money per click
 
@@ -630,6 +686,7 @@ function upgradeBuilding(buildingName) {
             document.getElementById(`${buildingName}-passive`).innerText = `Passive: ${Math.round(building.passive)}`;
             updateUI();
             checkCityLevelUp();
+            saveUserData();
         } else {
             console.log('Not enough money to upgrade.');
         }
