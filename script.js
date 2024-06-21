@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const serverUrl = 'http://51.20.10.135:5000/api'; // Обновленный URL для обращения к серверу
+    const serverUrl = '/api'; // Используем путь, который будет проксирован через Netlify
 
     try {
         const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
