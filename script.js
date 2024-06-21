@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Обновление UI
             updateMoneyDisplay();
             updatePassiveDisplay();
+            updateBuildingsDisplay(data.buildings);
         } else {
             console.error('Failed to load user data:', data.error);
         }
@@ -285,6 +286,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error fetching user data:', error);
     }
 });
+
+function updateBuildingsDisplay(buildings) {
+    const buildingsContainer = document.querySelector('.upgrade-content');
+    if (buildingsContainer) {
+        buildingsContainer.innerHTML = ''; // Очищаем текущие здания
+
+        buildings.forEach(building => {
+            const buildingElement = document.createElement('div');
+            buildingElement.className = 'building-upgrade';
+            buildingElement.innerHTML = `
+                <img src="${building.image}" alt="${building.name}">
+                <div class="info-upgrade">
+                    <span class="title-upgrade">${building.name}</span>
+                    <span class="level-upgrade">LVL: ${building.level}</span>
+                    <span class="passive-upgrade">Passive: ${building.passive_income}</span>
+                </div>
+            `;
+            buildingsContainer.appendChild(buildingElement);
+        });
+    }
+}
 
 let moneyPerClick = 1; // Initial money per click
 
