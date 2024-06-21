@@ -278,7 +278,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Обновление UI
             updateMoneyDisplay();
             updatePassiveDisplay();
-            updateBuildingsDisplay(data.buildings);
+            if (Array.isArray(data.buildings)) {
+                updateBuildingsDisplay(data.buildings);
+            } else {
+                console.error('Buildings data is not an array:', data.buildings);
+            }
         } else {
             console.error('Failed to load user data:', data.error);
         }
@@ -290,8 +294,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 function updateBuildingsDisplay(buildings) {
     const buildingsContainer = document.querySelector('.upgrade-content');
     if (buildingsContainer) {
-        buildingsContainer.innerHTML = ''; // Очищаем текущие здания
-
         buildings.forEach(building => {
             const buildingElement = document.createElement('div');
             buildingElement.className = 'building-upgrade';
@@ -306,7 +308,6 @@ function updateBuildingsDisplay(buildings) {
             buildingsContainer.appendChild(buildingElement);
         });
     }
-}
 
 let moneyPerClick = 1; // Initial money per click
 
