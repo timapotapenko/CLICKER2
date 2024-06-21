@@ -252,10 +252,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const serverUrl = '/api'; // Используем путь, который будет проксирован через Netlify
+    const serverUrl = 'https://51.20.10.135'; // Используем HTTPS и ваш публичный IP
 
     try {
-        const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
+        const response = await fetch(`${serverUrl}/api/get_user_data/${userId}`);
         const data = await response.json();
 
         if (response.ok) {
