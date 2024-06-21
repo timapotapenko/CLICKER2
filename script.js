@@ -252,60 +252,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const serverUrl = 'https://51.20.10.135/api'; // Используем HTTPS и ваш публичный IP
+    const serverUrl = '/api'; // Используем путь, который будет проксирован через Netlify
 
     try {
-        const response = await fetch(`${serverUrl}/get_user_data/${userId}`, {
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'same-origin'
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        
+        const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
         const data = await response.json();
 
-        console.log('Data received:', data);
+        if (response.ok) {
+            console.log('Data received:', data);
 
-        // Обновление значений переменных
-        money = data.money;
-        passiveIncome = data.passive_income;
-        cityLevel = data.city_level;
-        friendsInvited = data.friends_invited;
-        availableClicks = data.available_clicks;
-        moneyPerClick = data.money_per_click;
-        twitterRewardClaimed = data.twitter_reward_claimed;
-        youtubeRewardClaimed = data.youtube_reward_claimed;
-        telegramRewardClaimed = data.telegram_reward_claimed;
-        invite1RewardClaimed = data.invite1_reward_claimed;
-        invite5RewardClaimed = data.invite5_reward_claimed;
-        invite10RewardClaimed = data.invite10_reward_claimed;
+            // Обновление значений переменных
+            money = data.money;
+            passiveIncome = data.passive_income;
+            cityLevel = data.city_level;
+            friendsInvited = data.friends_invited;
+            availableClicks = data.available_clicks;
+            moneyPerClick = data.money_per_click;
+            twitterRewardClaimed = data.twitter_reward_claimed;
+            youtubeRewardClaimed = data.youtube_reward_claimed;
+            telegramRewardClaimed = data.telegram_reward_claimed;
+            invite1RewardClaimed = data.invite1_reward_claimed;
+            invite5RewardClaimed = data.invite5_reward_claimed;
+            invite10RewardClaimed = data.invite10_reward_claimed;
 
-        // Обновление данных зданий
-        Object.keys(data.buildings).forEach(buildingName => {
-            buildings[buildingName].level = data.buildings[buildingName].level;
-            buildings[buildingName].passive = data.buildings[buildingName].passive;
-        });
+            // Обновление данных зданий
+            buildings = data.buildings || {};
 
-        // Обновление UI
-        updateUI();
+            // Обновление UI
+            updateMoneyDisplay();
+            updatePassiveDisplay();
+        } else {
+            console.error('Failed to load user data:', data.error);
+        }
     } catch (error) {
         console.error('Error fetching user data:', error);
     }
+
+    // Добавление слушателя событий для сохранения данных
+    document.getElementById('save-button').addEventListener('click', saveUserData);
 });
 
-
-
-function saveUserData() {
+// Функция для сохранения данных пользователя
+async function saveUserData() {
     const userId = new URLSearchParams(window.location.search).get('user_id');
-    if (!userId) {
-        console.error('User ID is not provided in the URL');
-        return;
-    }
-
     const serverUrl = '/api';
+
     const userData = {
         money,
         passive_income: passiveIncome,
@@ -319,34 +310,26 @@ function saveUserData() {
         invite1_reward_claimed: invite1RewardClaimed,
         invite5_reward_claimed: invite5RewardClaimed,
         invite10_reward_claimed: invite10RewardClaimed,
-        buildings: {}
+        buildings: buildings
     };
 
-    Object.keys(buildings).forEach(buildingName => {
-        userData.buildings[buildingName] = {
-            level: buildings[buildingName].level,
-            passive: buildings[buildingName].passive
-        };
-    });
+    try {
+        const response = await fetch(`${serverUrl}/update_user_data/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
 
-    fetch(`${serverUrl}/update_user_data/${userId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
+        if (response.ok) {
             console.log('User data saved successfully');
         } else {
-            console.error('Failed to save user data:', data.error);
+            console.error('Failed to save user data:', response.statusText);
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error saving user data:', error);
-    });
+    }
 }
 
 let moneyPerClick = 1; // Initial money per click
