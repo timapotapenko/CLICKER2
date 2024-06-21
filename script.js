@@ -255,10 +255,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const serverUrl = 'https://51.20.10.135/api'; // Используем HTTPS и ваш публичный IP
 
     try {
-        const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
+        const response = await fetch(`${serverUrl}/get_user_data/${userId}`, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'same-origin'
+        });
+
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
+        
         const data = await response.json();
 
         console.log('Data received:', data);
@@ -289,6 +295,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error fetching user data:', error);
     }
 });
+
 
 
 function saveUserData() {
