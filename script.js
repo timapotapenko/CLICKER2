@@ -252,44 +252,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const serverUrl = 'https://51.20.10.135'; // Используем HTTPS и ваш публичный IP
+    const serverUrl = 'https://51.20.10.135/api'; // Используем HTTPS и ваш публичный IP
 
     try {
-        const response = await fetch(`${serverUrl}/api/get_user_data/${userId}`);
+        const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
         const data = await response.json();
 
-        if (response.ok) {
-            console.log('Data received:', data);
+        console.log('Data received:', data);
 
-            // Обновление значений переменных
-            money = data.money;
-            passiveIncome = data.passive_income;
-            cityLevel = data.city_level;
-            friendsInvited = data.friends_invited;
-            availableClicks = data.available_clicks;
-            moneyPerClick = data.money_per_click;
-            twitterRewardClaimed = data.twitter_reward_claimed;
-            youtubeRewardClaimed = data.youtube_reward_claimed;
-            telegramRewardClaimed = data.telegram_reward_claimed;
-            invite1RewardClaimed = data.invite1_reward_claimed;
-            invite5RewardClaimed = data.invite5_reward_claimed;
-            invite10RewardClaimed = data.invite10_reward_claimed;
+        // Обновление значений переменных
+        money = data.money;
+        passiveIncome = data.passive_income;
+        cityLevel = data.city_level;
+        friendsInvited = data.friends_invited;
+        availableClicks = data.available_clicks;
+        moneyPerClick = data.money_per_click;
+        twitterRewardClaimed = data.twitter_reward_claimed;
+        youtubeRewardClaimed = data.youtube_reward_claimed;
+        telegramRewardClaimed = data.telegram_reward_claimed;
+        invite1RewardClaimed = data.invite1_reward_claimed;
+        invite5RewardClaimed = data.invite5_reward_claimed;
+        invite10RewardClaimed = data.invite10_reward_claimed;
 
-            // Обновление данных зданий
-            Object.keys(data.buildings).forEach(buildingName => {
-                buildings[buildingName].level = data.buildings[buildingName].level;
-                buildings[buildingName].passive = data.buildings[buildingName].passive;
-            });
+        // Обновление данных зданий
+        Object.keys(data.buildings).forEach(buildingName => {
+            buildings[buildingName].level = data.buildings[buildingName].level;
+            buildings[buildingName].passive = data.buildings[buildingName].passive;
+        });
 
-            // Обновление UI
-            updateUI();
-        } else {
-            console.error('Failed to load user data:', data.error);
-        }
+        // Обновление UI
+        updateUI();
     } catch (error) {
         console.error('Error fetching user data:', error);
     }
 });
+
 
 function saveUserData() {
     const userId = new URLSearchParams(window.location.search).get('user_id');
