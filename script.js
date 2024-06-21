@@ -729,6 +729,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const data = await response.json();
 
         if (response.ok) {
+            console.log('Data received:', data);
+
             let money = data.money;
             let passiveIncome = data.passive_income;
             let cityLevel = data.city_level;
@@ -742,10 +744,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             let invite5RewardClaimed = data.invite5_reward_claimed;
             let invite10RewardClaimed = data.invite10_reward_claimed;
 
-            // Предполагается, что здания тоже получены из базы данных
-            // const buildings = data.buildings;
-
-            // Инициализация UI
+            // Обновление UI
+            console.log('Updating UI with received data');
             updateMoneyDisplay();
             updatePassiveDisplay();
             updateUI();
