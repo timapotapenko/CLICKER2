@@ -252,85 +252,82 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const serverUrl = '/api'; // Используем путь, который будет проксирован через Netlify
+    const serverUrl = 'http://13.60.42.44:5000/api'; // Замените на ваш IP и порт
 
     try {
         const response = await fetch(`${serverUrl}/get_user_data/${userId}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
 
-        if (response.ok) {
-            console.log('Data received:', data);
+        console.log('Data received:', data);
 
-            // Обновление значений переменных
-            money = data.money;
-            passiveIncome = data.passive_income;
-            cityLevel = data.city_level;
-            friendsInvited = data.friends_invited;
-            availableClicks = data.available_clicks;
-            moneyPerClick = data.money_per_click;
-            twitterRewardClaimed = data.twitter_reward_claimed;
-            youtubeRewardClaimed = data.youtube_reward_claimed;
-            telegramRewardClaimed = data.telegram_reward_claimed;
-            invite1RewardClaimed = data.invite1_reward_claimed;
-            invite5RewardClaimed = data.invite5_reward_claimed;
-            invite10RewardClaimed = data.invite10_reward_claimed;
+        // Обновление значений переменных
+        money = data.money;
+        passiveIncome = data.passive_income;
+        cityLevel = data.city_level;
+        friendsInvited = data.friends_invited;
+        availableClicks = data.available_clicks;
+        moneyPerClick = data.money_per_click;
+        twitterRewardClaimed = data.twitter_reward_claimed;
+        youtubeRewardClaimed = data.youtube_reward_claimed;
+        telegramRewardClaimed = data.telegram_reward_claimed;
+        invite1RewardClaimed = data.invite1_reward_claimed;
+        invite5RewardClaimed = data.invite5_reward_claimed;
+        invite10RewardClaimed = data.invite10_reward_claimed;
 
-            // Обновление данных зданий
-            buildings = data.buildings || {};
+        // Обновление данных зданий
+        Object.assign(buildings, JSON.parse(data.buildings || '{}'));
 
-            // Обновление UI
-            updateMoneyDisplay();
-            updatePassiveDisplay();
-        } else {
-            console.error('Failed to load user data:', data.error);
-        }
+        // Обновление UI
+        updateMoneyDisplay();
+        updatePassiveDisplay();
     } catch (error) {
         console.error('Error fetching user data:', error);
     }
 
     // Добавление слушателя событий для сохранения данных
-    document.getElementById('save-button').addEventListener('click', saveUserData);
+    const saveButton = document.getElementById('save-button');
+    if (saveButton) {
+        saveButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${serverUrl}/save_user_data`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        money,
+                        passive_income: passiveIncome,
+                        city_level: cityLevel,
+                        friends_invited: friendsInvited,
+                        available_clicks: availableClicks,
+                        money_per_click: moneyPerClick,
+                        twitter_reward_claimed: twitterRewardClaimed,
+                        youtube_reward_claimed: youtubeRewardClaimed,
+                        telegram_reward_claimed: telegramRewardClaimed,
+                        invite1_reward_claimed: invite1RewardClaimed,
+                        invite5_reward_claimed: invite5RewardClaimed,
+                        invite10_reward_claimed: invite10RewardClaimed,
+                        buildings: JSON.stringify(buildings),
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Data saved successfully:', result);
+            } catch (error) {
+                console.error('Error saving user data:', error);
+            }
+        });
+    }
 });
 
-// Функция для сохранения данных пользователя
-async function saveUserData() {
-    const userId = new URLSearchParams(window.location.search).get('user_id');
-    const serverUrl = '/api';
-
-    const userData = {
-        money,
-        passive_income: passiveIncome,
-        city_level: cityLevel,
-        friends_invited: friendsInvited,
-        available_clicks: availableClicks,
-        money_per_click: moneyPerClick,
-        twitter_reward_claimed: twitterRewardClaimed,
-        youtube_reward_claimed: youtubeRewardClaimed,
-        telegram_reward_claimed: telegramRewardClaimed,
-        invite1_reward_claimed: invite1RewardClaimed,
-        invite5_reward_claimed: invite5RewardClaimed,
-        invite10_reward_claimed: invite10RewardClaimed,
-        buildings: buildings
-    };
-
-    try {
-        const response = await fetch(`${serverUrl}/update_user_data/${userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        });
-
-        if (response.ok) {
-            console.log('User data saved successfully');
-        } else {
-            console.error('Failed to save user data:', response.statusText);
-        }
-    } catch (error) {
-        console.error('Error saving user data:', error);
-    }
-}
 
 let moneyPerClick = 1; // Initial money per click
 
